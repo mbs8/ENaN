@@ -11,7 +11,6 @@ def natural_neighbour(df) -> pd.DataFrame:
     stop = False
     last_iter = False
     while not stop:
-        print(r)
         
         if last_iter:
                 stop = True
