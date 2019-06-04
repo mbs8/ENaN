@@ -52,9 +52,11 @@ def select_prototypes(df, nan, labels):
     
     for i, row in nan.iterrows():
         i_natural_neighbours_df = df.iloc[nan.iloc[i].natural_neighbours]
-        kdt = KDTree(i_natural_neighbours_df.values, leaf_size=30, metric='euclidean')
-        i_nn = kdt.query(df.iloc[i].values.reshape(1, -1), k=1, return_distance=False)[0][0]
-        if labels.iloc[i_nn] == labels.iloc[i]:
-            filtered_df = filtered_df.append(df.iloc[i])
+        if i_natural_neighbours_df.size > 0:
+            kdt = KDTree(i_natural_neighbours_df.values, leaf_size=30, metric='euclidean')
+            i_natural_neigbour_array_index = kdt.query(df.iloc[i].values.reshape(1, -1), k=1, return_distance=False)[0][0]
+            i_nn = nan.iloc[i].natural_neighbours[i_natural_neigbour_array_index]
+            if labels.iloc[i_nn] == labels.iloc[i]:
+                filtered_df = filtered_df.append(df.iloc[i])
         
     return filtered_df
